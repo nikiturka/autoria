@@ -1,14 +1,35 @@
 import time
 import subprocess
+import schedule
 
 
 def run_spider():
     print("Running spider...")
-    subprocess.run(["scrapy", "crawl", "autoria"])  # Замените "autoria" на имя вашего паука
+    subprocess.run(["scrapy", "crawl", "autoria"])
+
+
+def create_db_dump():
+    print("Creating database dump...")
+    timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
+    dump_file = f"dumps/db_dump_{timestamp}.sql"
+    with open(dump_file, 'w') as f:
+        subprocess.run([
+            'pg_dump',
+            '--dbname=test_dataox',
+            '--username=postgres',
+            '--password=postgres',
+        ], stdout=f)
+    print("Successfully created database dump.")
 
 
 if __name__ == "__main__":
-    while True:
-        run_spider()
-        print("Waiting for 30 seconds before next run...")
-        time.sleep(30)
+    # schedule.every(10).seconds.do(run_spider)
+    # schedule.every(10).seconds.do(create_db_dump)
+    run_spider()
+    create_db_dump()
+    try:
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("Scheduler stopped.")
