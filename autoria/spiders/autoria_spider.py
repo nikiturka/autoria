@@ -9,7 +9,7 @@ class AutoRiaSpider(scrapy.Spider):
     next_page = 2
     total_items_on_page = 0
     parsed_items_on_page = 0
-    page_limit = 1
+    page_limit = 6
 
     def parse(self, response):
         sections = response.css('section.ticket-item')
@@ -43,7 +43,7 @@ class AutoRiaSpider(scrapy.Spider):
 
         self.parsed_items_on_page += 1
 
-        items['url'] = self.start_urls[0]
+        items['url'] = response.url
         items['title'] = title
         items['price_usd'] = price_usd
         items['odometer'] = odometer

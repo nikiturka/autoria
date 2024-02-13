@@ -57,7 +57,19 @@ class AutoriaPipeline:
         if self.connection is None or self.connection.closed:
             self.connect_to_database()
 
-        sql = """
+        sql_select = """
+            SELECT id FROM cars WHERE url = %s
+        """
+        url_to_check = (item['url'],)
+
+        self.cur.execute(sql_select, url_to_check)
+        existing_row = self.cur.fetchone()
+
+        if existing_row:
+            logging.info("Item with the same URL already exists. Skipping insertion.")
+            return item
+
+        sql_insert = """
             INSERT INTO cars (url, title, price_usd, odometer, username, phone_number, image_url, images_count, car_number, car_vin)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
@@ -75,7 +87,7 @@ class AutoriaPipeline:
         )
 
         try:
-            self.cur.execute(sql, values)
+            self.cur.execute(sql_insert, values)
             self.connection.commit()
             logging.info("Item inserted into database successfully!")
         except Exception as e:
