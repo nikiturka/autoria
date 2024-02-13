@@ -1,6 +1,9 @@
 import os
 import psycopg2
 import logging
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class AutoriaPipeline:
@@ -13,11 +16,11 @@ class AutoriaPipeline:
     def connect_to_database(self):
         try:
             self.connection = psycopg2.connect(
-                dbname="test_dataox",
-                user="postgres",
-                password="postgres",
-                host="localhost",
-                port="5432"
+                dbname=os.environ.get("DB_NAME"),
+                user=os.environ.get("DB_USER"),
+                password=os.environ.get("DB_PASSWORD"),
+                host=os.environ.get("DB_HOST"),
+                port=os.environ.get("DB_PORT")
             )
             self.cur = self.connection.cursor()
             logging.info("Connected to database successfully!")
