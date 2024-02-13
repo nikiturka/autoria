@@ -1,3 +1,4 @@
+import datetime
 import os
 import psycopg2
 import logging
@@ -43,7 +44,8 @@ class AutoriaPipeline:
                 image_url TEXT,
                 images_count INTEGER,
                 car_number TEXT,
-                car_vin TEXT
+                car_vin TEXT,
+                datetime_found TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """
         try:
@@ -70,8 +72,8 @@ class AutoriaPipeline:
             return item
 
         sql_insert = """
-            INSERT INTO cars (url, title, price_usd, odometer, username, phone_number, image_url, images_count, car_number, car_vin)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO cars (url, title, price_usd, odometer, username, phone_number, image_url, images_count, car_number, car_vin, datetime_found)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
         values = (
             item['url'],
@@ -83,7 +85,8 @@ class AutoriaPipeline:
             item['image_url'],
             item['images_count'],
             item['car_number'],
-            item['car_vin']
+            item['car_vin'],
+            datetime.datetime.now()
         )
 
         try:
