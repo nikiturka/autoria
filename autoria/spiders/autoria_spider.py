@@ -59,7 +59,7 @@ class AutoRiaSpider(scrapy.Spider):
         if self.parsed_items_on_page == self.total_items_on_page:
             self.log(f"All items on page '{self.next_page - 1}' have been parsed.")
 
-            if self.next_page < self.page_limit:
+            if self.next_page <= self.page_limit:
                 next_page = f"https://auto.ria.com/uk/car/used/?page={self.next_page}"
                 self.next_page += 1
 
@@ -67,5 +67,7 @@ class AutoRiaSpider(scrapy.Spider):
 
 
 def split_photo_count(string):
-    string_split = string.split(" ")
-    return string_split[2]
+    if string is not None:
+        string_split = string.split(" ")
+        return string_split[2]
+    return
