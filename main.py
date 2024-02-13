@@ -15,9 +15,7 @@ def create_db_dump():
     with open(dump_file, 'w') as f:
         subprocess.run([
             'pg_dump',
-            '--dbname=test_dataox',
-            '--username=postgres',
-            '--password=postgres',
+            '--dbname=postgresql://postgres:postgres@localhost:5432/test_dataox'
         ], stdout=f)
     print("Successfully created database dump.")
 
