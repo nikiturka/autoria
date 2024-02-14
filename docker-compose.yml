@@ -11,7 +11,7 @@ services:
       - postgres_database
 
   postgres_database:
-    image: postgres
+    image: postgres:15
     environment:
       - POSTGRES_DB=autoria_db
       - POSTGRES_USER=postgres
