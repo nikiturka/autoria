@@ -6,7 +6,7 @@ import logging
 class AutoRiaSpider(scrapy.Spider):
     name = 'autoria'
     start_urls = ['https://auto.ria.com/uk/car/used/?page=1']
-    page_limit = 6  # select how many pages to scrap
+    page_limit = 10  # select how many pages to scrap
 
     def __init__(self):
         super(AutoRiaSpider, self).__init__()

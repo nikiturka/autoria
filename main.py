@@ -1,4 +1,5 @@
 import os
+import threading
 import time
 import subprocess
 import schedule
@@ -33,13 +34,24 @@ def create_db_dump():
     logging.info(f"Database dump created at: {dump_filename}")
 
 
-if __name__ == "__main__":
-    # To run every day at 12:00
-    # schedule.every(12).hours.do(run_spider)
-    # schedule.every(12).hours.do(create_db_dump)
+def run_functions():
+    spider_thread = threading.Thread(target=run_spider)
+    dump_thread = threading.Thread(target=create_db_dump)
 
-    run_spider()
-    create_db_dump()
+    spider_thread.start()
+    dump_thread.start()
+
+    spider_thread.join()
+    dump_thread.join()
+
+
+if __name__ == "__main__":
+    # To run everyday at 12:00
+    # schedule.every().day.at("12:00").do(run_functions)
+
+    # To run right now
+    run_functions()
+
     try:
         while True:
             schedule.run_pending()
