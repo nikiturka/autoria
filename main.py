@@ -6,8 +6,8 @@ import schedule
 from dotenv import load_dotenv
 import logging
 
-load_dotenv("/app/.env")
-load_dotenv("/app/.env.example")
+load_dotenv(".env")
+load_dotenv(".env.example")
 
 db_name = os.environ.get("DOCKER_POSTGRES_DB")
 db_user = os.environ.get("DOCKER_POSTGRES_USER")

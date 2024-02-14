@@ -13,7 +13,7 @@ So, I decided to use Scrapy, because this framework is more powerful, than Beaut
 and Selenium (in terms of scraping). Also, I used psycopg2 to connect to docker database
 and create table / fields there.
 
-The main file of the project - main.py. Every day at 12:00 it runs run_spider() and create_db_dump() .
+The main file of the project - main.py. Every day at 12:00 (or right from the start) it runs run_spider() and create_db_dump() .
 
 run_spider() scrapes information and saves it to database. In autoria/spiders folder
 there is the main class that scrapes information from the site.
