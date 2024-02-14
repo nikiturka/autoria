@@ -4,14 +4,6 @@ import subprocess
 import schedule
 from dotenv import load_dotenv
 
-load_dotenv()
-
-db_name = os.environ.get("DB_NAME")
-db_user = os.environ.get("DB_USER")
-db_password = os.environ.get("DB_PASSWORD")
-db_host = os.environ.get("DB_HOST")
-db_port = os.environ.get("DB_PORT")
-
 
 def run_spider():
     print("Running spider...")
@@ -20,22 +12,30 @@ def run_spider():
 
 def create_db_dump():
     print("Creating database dump...")
-    timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
-    dump_file = f"dumps/db_dump_{timestamp}.sql"
 
-    with open(dump_file, 'w') as f:
-        subprocess.run([
-            'pg_dump',
-            f'--dbname=postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}'
-        ], stdout=f)
-    print("Successfully created database dump.")
+    load_dotenv("/app/.env")
+
+    current_timestamp = time.strftime("%Y%m%d%H%M%S")
+    dump_filename = f"dumps/db_dump_{current_timestamp}.sql.gz"
+
+    db_name = os.environ.get("DOCKER_POSTGRES_DB")
+    db_user = os.environ.get("DOCKER_POSTGRES_USER")
+    db_password = os.environ.get("DOCKER_POSTGRES_PASSWORD")
+    db_host = os.environ.get("DOCKER_POSTGRES_HOST")
+    db_port = os.environ.get("DOCKER_POSTGRES_PORT")
+
+    db_url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+
+    with open(dump_filename, 'wb') as f:
+        subprocess.run(['pg_dump', '--dbname', db_url], stdout=f)
+
+    print(f"Database dump created at: {dump_filename}")
 
 
 if __name__ == "__main__":
     # schedule.every(12).hours.do(run_spider)
     # schedule.every(12).hours.do(create_db_dump)
-    schedule.every(10).seconds.do(run_spider)
-    schedule.every(10).seconds.do(create_db_dump)
+    run_spider()
     try:
         while True:
             schedule.run_pending()

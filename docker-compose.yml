@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  app:
+    build: .
+    container_name: app
+    command: python main.py
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres_database
+
+  postgres_database:
+    image: postgres
+    environment:
+      - POSTGRES_DB=${DOCKER_POSTGRES_DB}
+      - POSTGRES_USER=${DOCKER_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${DOCKER_POSTGRES_PASSWORD}
+    container_name: docker_postgres
+    volumes:
+      - local_pgdata:/var/lib/postgresql/data/
+
+volumes:
+  local_pgdata:
