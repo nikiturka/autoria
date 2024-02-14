@@ -12,10 +12,8 @@ services:
 
   postgres_database:
     image: postgres:15
-    environment:
-      - POSTGRES_DB=autoria_db
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+    env_file:
+      - .env.example
     container_name: docker_postgres
     volumes:
       - local_pgdata:/var/lib/postgresql/data/

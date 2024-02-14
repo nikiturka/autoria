@@ -14,11 +14,11 @@ class AutoriaPipeline:
     def connect_to_database(self):
         try:
             self.connection = psycopg2.connect(
-                dbname=os.environ.get("DOCKER_POSTGRES_DB"),
-                user=os.environ.get("DOCKER_POSTGRES_USER"),
-                password=os.environ.get("DOCKER_POSTGRES_PASSWORD"),
-                host=os.environ.get("DOCKER_POSTGRES_HOST"),
-                port=os.environ.get("DOCKER_POSTGRES_PORT")
+                dbname=os.environ.get("POSTGRES_DB"),
+                user=os.environ.get("POSTGRES_USER"),
+                password=os.environ.get("POSTGRES_PASSWORD"),
+                host=os.environ.get("POSTGRES_HOST"),
+                port=os.environ.get("POSTGRES_PORT")
             )
             self.cur = self.connection.cursor()
             logging.info("Connected to database successfully!")
