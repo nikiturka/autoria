@@ -4,7 +4,8 @@ import psycopg2
 import logging
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv('.env')
+load_dotenv('.env.example')
 
 
 class AutoriaPipeline:

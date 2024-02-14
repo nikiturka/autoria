@@ -5,6 +5,9 @@ import schedule
 from dotenv import load_dotenv
 import logging
 
+load_dotenv("/app/.env")
+load_dotenv("/app/.env.example")
+
 
 def run_spider():
     logging.info("Running spider...")
@@ -13,8 +16,6 @@ def run_spider():
 
 def create_db_dump():
     logging.info("Creating database dump...")
-
-    load_dotenv("/app/.env")
 
     current_timestamp = time.strftime("%Y%m%d%H%M%S")
     dump_filename = f"dumps/db_dump_{current_timestamp}.sql.gz"
