@@ -68,7 +68,7 @@ class AutoriaPipeline:
         existing_row = self.cur.fetchone()
 
         if existing_row:
-            logging.info("Item with the same URL already exists. Skipping insertion.")
+            logging.info(f"Item with URL {item['url']} already exists. Skipping insertion.")
             return item
 
         sql_insert = """
@@ -92,8 +92,8 @@ class AutoriaPipeline:
         try:
             self.cur.execute(sql_insert, values)
             self.connection.commit()
-            logging.info("Item inserted into database successfully!")
+            logging.info(f"Item {item['url']} inserted into database successfully!")
         except Exception as e:
-            logging.error(f"Error inserting item into database: {e}")
+            logging.error(f"Error inserting item {item['url']} into database: {e}")
 
         return item

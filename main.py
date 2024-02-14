@@ -3,15 +3,16 @@ import time
 import subprocess
 import schedule
 from dotenv import load_dotenv
+import logging
 
 
 def run_spider():
-    print("Running spider...")
+    logging.info("Running spider...")
     subprocess.run(["scrapy", "crawl", "autoria"])
 
 
 def create_db_dump():
-    print("Creating database dump...")
+    logging.info("Creating database dump...")
 
     load_dotenv("/app/.env")
 
@@ -29,13 +30,16 @@ def create_db_dump():
     with open(dump_filename, 'wb') as f:
         subprocess.run(['pg_dump', '--dbname', db_url], stdout=f)
 
-    print(f"Database dump created at: {dump_filename}")
+    logging.info(f"Database dump created at: {dump_filename}")
 
 
 if __name__ == "__main__":
+    # To run every day at 12:00
     # schedule.every(12).hours.do(run_spider)
     # schedule.every(12).hours.do(create_db_dump)
+
     run_spider()
+    create_db_dump()
     try:
         while True:
             schedule.run_pending()

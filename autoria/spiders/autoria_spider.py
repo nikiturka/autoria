@@ -1,10 +1,12 @@
 import scrapy
 from autoria.items import AutoRiaItem
+import logging
+
 
 class AutoRiaSpider(scrapy.Spider):
     name = 'autoria'
     start_urls = ['https://auto.ria.com/uk/car/used/?page=1']
-    page_limit = 6
+    page_limit = 6  # select how many pages to scrap
 
     def __init__(self):
         super(AutoRiaSpider, self).__init__()
@@ -41,7 +43,7 @@ class AutoRiaSpider(scrapy.Spider):
         yield item
 
         if self.parsed_items_on_page == self.total_items_on_page:
-            self.log(f"All items on page '{self.next_page - 1}' have been parsed.")
+            logging.info(f"[INFO]: All items on page {self.next_page - 1} have been parsed.")  # Using the logger here
 
             if self.next_page <= self.page_limit:
                 next_page = f"https://auto.ria.com/uk/car/used/?page={self.next_page}"
